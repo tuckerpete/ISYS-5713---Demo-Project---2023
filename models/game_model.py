@@ -24,24 +24,6 @@ class Game(base_model.Base):
     def __repr__(self):
         return f"Game(id='{self.id}', season='{self.season}', week='{self.week}', matchup='{self.away_team_name} vs. {self.home_team_name}')"
 
-### OLD Game Class
-# class Game:
-#     # This method gets called when a new Game is created. Data from the data file will be passed to this method
-#     def __init__(self, data):
-#         self.id = data['id']
-#         self.season = data['season']
-#         self.week = data['week']
-#         self.date = data['start_date']
-#         self.venue = data['venue']
-#         self.home_team_name = data['home_team']
-#         self.away_team_name = data['away_team']
-#         self.scores = {data['home_id']: data['home_points'],
-#                        data['away_id']: data['away_points']}
-        
-#     # This method gets called whenever we try to print a Game object
-#     def __str__(self):
-#         return f"Game(id='{self.id}', season='{self.season}', week='{self.week}', matchup='{self.away_team_name} vs. {self.home_team_name}')"
-
 
 def read_in_games_data():
     # open and read games data file
@@ -66,5 +48,15 @@ def read_in_games_data():
                                  week=game_data['week'],
                                  date=game_data['start_date'],
                                  venue=game_data['venue']))
+                
+                session.add(Score(game_id=game_data['id'],
+                                  team_id=game_data['home_id'],
+                                  team_side='Home',
+                                  points=game_data['home_points']))
+                
+                session.add(Score(game_id=game_data['id'],
+                                  team_id=game_data['away_id'],
+                                  team_side='Away',
+                                  points=game_data['away_points']))
 
         session.commit()

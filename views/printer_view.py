@@ -5,13 +5,12 @@ def print_ppg_ranking_table(teams_sorted_by_ppg):
     print("-----------------------------------")
     i = 0
     last_ppg = 9999999
-    for team_object in teams_sorted_by_ppg:
-        ppg = team_object.ppg
+    for team_school, ppg in teams_sorted_by_ppg:
         if ppg == 0:
             break
         if last_ppg != ppg:
             i = i + 1
         
-        print(str(i) + "\t| " + str(ppg) + "\t| " + team_object.school)
+        print(str(i) + "\t| " + str(round(ppg,2)) + "\t| " + team_school)
 
         last_ppg = ppg

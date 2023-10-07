@@ -44,7 +44,7 @@ http://localhost:5000/ppg?limit=10
 ## Teams Endpoints  
 
 <a id="get-single-team"></a>
-### `/teams/\<id\>`
+### `/teams/{team_id}`
 
 |METHOD|`GET`|
 |-------|-----|
@@ -127,7 +127,7 @@ http://localhost:5000/teams
 
 ---------------------
 <a id="update-team"></a>
-### `/teams`
+### `/teams/{team_id}`
 
 |METHOD|`PUT`|
 |-------|-----|
@@ -135,7 +135,7 @@ http://localhost:5000/teams
 |**Body**|Takes a json object with the foloowing attributes: `id`, `school`, `abbreviation`, `mascot`, `conference`, `color`, `alt_color`|
 
 #### Example Request
-http://localhost:5000/teams
+http://localhost:5000/teams/1
 
 #### Example Body
 ```json
@@ -157,7 +157,7 @@ http://localhost:5000/teams
 
 ---------------------
 <a id="delete-team"></a>
-### `/teams/\<id>`
+### `/teams/{team_id}`
 
 |METHOD|`DELETE`|
 |-------|-----|

@@ -28,6 +28,8 @@ class Team(base_model.Base):
     def __repr__(self) -> str:
         return f"Team(id='{self.id}', school='{self.school}', conference='{self.conference}')"
 
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 def read_in_teams_data():
     # open and read teams data file
@@ -65,9 +67,34 @@ def rank_teams_by_ppg():
     return teams_sorted_by_ppg
 
 
-# select Team.school, avg(Score.points) as ppg
-# from Team
-# join Score on Team.id = Score.team_id
-# group by Team.id, Team.school
-# order by avg(Score.points) desc
+
+def get_team(team_id):
+    with Session(base_model.engine) as session:
+        team = session.query(Team).where(Team.id == team_id).first()
+    return team
+
+
+def create_team(team_data):
+    with Session(base_model.engine) as session:
+        new_team = Team( #id=team_data["id"],
+                            school=team_data['school'],
+                            mascot=team_data['mascot'],
+                            abbreviation=team_data['abbreviation'],
+                            conference=team_data['conference'],
+                            color=team_data['color'],
+                            alt_color=team_data['alt_color'])
+        session.add(new_team)
+        session.commit()
+        new_team_id = new_team.id
+        return new_team_id
+    
+def delete_team(team_id):
+    team = get_team(team_id)
+    if team is not None:
+        with Session(base_model.engine) as session:
+            session.delete(team)
+            session.commit()
+        return True
+    else:
+        return False
 

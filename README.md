@@ -28,14 +28,14 @@ http://localhost:5000/ppg?limit=10
 ```json
 [
     {
-        "ppg": 53.91,
         "rank": 1,
-        "school": "North Central"
+        "school": "North Central",
+        "ppg": 53.91
     },
     {
-        "ppg": 53.0,
         "rank": 2,
-        "school": "Incarnate Word"
+        "school": "Incarnate Word",
+        "ppg": 53.0
     },
     ...
 ]
@@ -57,13 +57,13 @@ http://localhost:5000/teams/2
 #### Example Response:
 ```json
 {
+    "id": 2,
+    "school": "Auburn",
     "abbreviation": "AUB",
     "alt_color": "#f1f2f3",
     "color": "#03244d",
     "conference": "SEC",
-    "id": 2,
-    "mascot": "Tigers",
-    "school": "Auburn"
+    "mascot": "Tigers"
 }
 ```
 
@@ -83,13 +83,13 @@ http://localhost:5000/teams?conference=SEC
 ```json
 [
     {
+        "id": 2,
+        "school": "Auburn",
         "abbreviation": "AUB",
         "alt_color": "#f1f2f3",
         "color": "#03244d",
         "conference": "SEC",
-        "id": 2,
-        "mascot": "Tigers",
-        "school": "Auburn"
+        "mascot": "Tigers"
     },
     ...
 ]
@@ -110,13 +110,14 @@ http://localhost:5000/teams
 #### Example Body
 ```json
 {
+    "id": 1,
+    "school": "Pete University",
     "abbreviation": "PETE",
     "alt_color": "#f1f2f3",
     "color": "#03244d",
     "conference": "Best Conference",
-    "id": 1,
-    "mascot": "Elephant",
-    "school": "Pete University"
+    "mascot": "Elephant"
+    
 }
 ```
 

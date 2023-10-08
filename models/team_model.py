@@ -58,8 +58,6 @@ def read_in_teams_data():
         session.commit()
 
 
-
-
 def rank_teams_by_ppg():
     # order the teams by most to least ppg
     with Session(base_model.engine) as session:
@@ -67,26 +65,22 @@ def rank_teams_by_ppg():
     return teams_sorted_by_ppg
 
 
-
 def get_team(team_id):
     with Session(base_model.engine) as session:
         team = session.query(Team).where(Team.id == team_id).first()
     return team
 
-
 def create_team(team_data):
     with Session(base_model.engine) as session:
-        new_team = Team( #id=team_data["id"],
-                            school=team_data['school'],
-                            mascot=team_data['mascot'],
-                            abbreviation=team_data['abbreviation'],
-                            conference=team_data['conference'],
-                            color=team_data['color'],
-                            alt_color=team_data['alt_color'])
+        new_team = Team( school=team_data['school'],
+                         mascot=team_data['mascot'],
+                         abbreviation=team_data['abbreviation'],
+                         conference=team_data['conference'],
+                         color=team_data['color'],
+                         alt_color=team_data['alt_color'])
         session.add(new_team)
         session.commit()
-        new_team_id = new_team.id
-        return new_team_id
+        return new_team
     
 def delete_team(team_id):
     team = get_team(team_id)
@@ -97,4 +91,18 @@ def delete_team(team_id):
         return True
     else:
         return False
+    
+def update_team(team_id, team_data):
+    if get_team(team_id) is not None:
+        with Session(base_model.engine) as session:
+            session.query(Team).where(Team.id == team_id).update(team_data)
+            session.commit()
+    return get_team(team_id)
 
+def get_teams(conference=None):
+    with Session(base_model.engine) as session:
+        teams_query = session.query(Team)
+        if conference is not None:
+            teams_query = teams_query.where(Team.conference == conference)
+        teams = teams_query.all()
+    return teams

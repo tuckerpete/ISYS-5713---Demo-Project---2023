@@ -28,6 +28,8 @@ class Team(base_model.Base):
     def __repr__(self) -> str:
         return f"Team(id='{self.id}', school='{self.school}', conference='{self.conference}')"
 
+    def as_dict(self):
+       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 def read_in_teams_data():
     # open and read teams data file
@@ -56,8 +58,6 @@ def read_in_teams_data():
         session.commit()
 
 
-
-
 def rank_teams_by_ppg():
     # order the teams by most to least ppg
     with Session(base_model.engine) as session:
@@ -65,9 +65,44 @@ def rank_teams_by_ppg():
     return teams_sorted_by_ppg
 
 
-# select Team.school, avg(Score.points) as ppg
-# from Team
-# join Score on Team.id = Score.team_id
-# group by Team.id, Team.school
-# order by avg(Score.points) desc
+def get_team(team_id):
+    with Session(base_model.engine) as session:
+        team = session.query(Team).where(Team.id == team_id).first()
+    return team
 
+def create_team(team_data):
+    with Session(base_model.engine) as session:
+        new_team = Team( school=team_data['school'],
+                         mascot=team_data['mascot'],
+                         abbreviation=team_data['abbreviation'],
+                         conference=team_data['conference'],
+                         color=team_data['color'],
+                         alt_color=team_data['alt_color'])
+        session.add(new_team)
+        session.commit()
+        return new_team
+    
+def delete_team(team_id):
+    team = get_team(team_id)
+    if team is not None:
+        with Session(base_model.engine) as session:
+            session.delete(team)
+            session.commit()
+        return True
+    else:
+        return False
+    
+def update_team(team_id, team_data):
+    if get_team(team_id) is not None:
+        with Session(base_model.engine) as session:
+            session.query(Team).where(Team.id == team_id).update(team_data)
+            session.commit()
+    return get_team(team_id)
+
+def get_teams(conference=None):
+    with Session(base_model.engine) as session:
+        teams_query = session.query(Team)
+        if conference is not None:
+            teams_query = teams_query.where(Team.conference == conference)
+        teams = teams_query.all()
+    return teams

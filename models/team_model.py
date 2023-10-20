@@ -1,4 +1,5 @@
 import json
+import requests
 
 from models import base_model
 from models.score_model import Score
@@ -32,9 +33,24 @@ class Team(base_model.Base):
        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 def read_in_teams_data():
-    # open and read teams data file
-    with open('teams_data.json') as file:
-        teams_data = json.load(file)
+    
+    # read teams data from API
+    base_url = 'https://api.collegefootballdata.com'
+    endpoint = '/teams'
+
+    with open('auth_key.txt', 'r') as auth_file:
+        auth_key = auth_file.read()
+
+    header = {'Authorization': f'Bearer {auth_key}'}
+
+    response = requests.get(base_url + endpoint, headers=header)
+
+    if response.status_code == 200:
+        teams_data = response.json()
+    else:
+        print(f'ERROR Code {response.status_code} - {response.reason} - {response.text}')
+        exit()
+
 
     with Session(base_model.engine) as session:
         # find teams already in the database

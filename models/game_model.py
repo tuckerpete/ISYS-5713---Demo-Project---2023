@@ -1,4 +1,5 @@
 import json
+import requests
 from models import base_model
 from models.score_model import Score
 
@@ -26,9 +27,23 @@ class Game(base_model.Base):
 
 
 def read_in_games_data():
-    # open and read games data file
-    with open('2022_games_data.json') as file:
-        games_data = json.load(file)
+    
+    # read games data from API
+    base_url = 'https://api.collegefootballdata.com'
+    endpoint = '/games?year=2023'
+
+    with open('auth_key.txt', 'r') as auth_file:
+        auth_key = auth_file.read()
+
+    header = {'Authorization': f'Bearer {auth_key}'}
+
+    response = requests.get(base_url + endpoint, headers=header)
+
+    if response.status_code == 200:
+        games_data = response.json()
+    else:
+        print(f'ERROR Code {response.status_code} - {response.reason} - {response.text}')
+        exit()
 
     # open a session with the database
     with Session(base_model.engine) as session:

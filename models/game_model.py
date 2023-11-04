@@ -75,3 +75,9 @@ def read_in_games_data():
                                   points=game_data['away_points']))
 
         session.commit()
+
+
+def get_seasons_list():
+    with Session(base_model.engine) as session:
+        season_results = session.query(Game.season).distinct().order_by(Game.season).all()
+    return [season[0] for season in season_results]

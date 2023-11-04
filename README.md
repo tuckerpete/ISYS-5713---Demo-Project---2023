@@ -1,11 +1,9 @@
 # ISYS 5713 Demo Project - *College Football Points-Per-Game*
-
+ 
 > 1. Setup your python environment: `pip install requirements.txt`
-
 > 2. **Backend** app entry point: `app.py`
 >    * Make sure to download `auth_key.txt` from Blackboard and add to the main folder
-
-> 3. **Frontend** app entry point: `\views\frontend.ipybn`
+> 3. **Frontend** app entry point: `\views\frontend.ipybn` 
 
 ## API Documentation
 This API provides important analytics to college football fans so that they can make informed decisions when choosing who to root for each week. The API also provides a mechanism for college football teams to be viewed, added, updated, and deleted.

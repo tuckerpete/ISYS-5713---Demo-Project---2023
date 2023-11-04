@@ -5,7 +5,7 @@ def print_ppg_ranking_table(teams_sorted_by_ppg):
 
     i = 0
     last_ppg = 9999999
-    for team_school, ppg in teams_sorted_by_ppg:
+    for id, team_school, ppg in teams_sorted_by_ppg:
         if ppg == 0:
             break
         if last_ppg != ppg:
@@ -15,7 +15,8 @@ def print_ppg_ranking_table(teams_sorted_by_ppg):
         ranked_teams.append({
             'rank': i,
             'ppg': round(ppg,2),
-            'team':team_school
+            'team':team_school,
+            'id': id
         })
 
 

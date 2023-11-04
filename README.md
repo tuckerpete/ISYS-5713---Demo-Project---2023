@@ -1,4 +1,12 @@
-# API Documentation
+# ISYS 5713 Demo Project - *College Football Points-Per-Game*
+
+> Setup your python environment: `pip install requirements.txt`
+
+> **Backend** app entry point: `app.py`
+
+> **Frontend** app entry point: `\views\frontend.ipybn`
+
+## API Documentation
 This API provides important analytics to college football fans so that they can make informed decisions when choosing who to root for each week. The API also provides a mechanism for college football teams to be viewed, added, updated, and deleted.
 
 **Table of Contents**
@@ -10,6 +18,8 @@ This API provides important analytics to college football fans so that they can 
     - [Add Team](#add-team)
     - [Update Team](#update-team)
     - [Delete Team](#delete-team)
+    - [Get Conferences](#get-conferences)
+    - [Get Seasons](#get-seasons)
 
 <a id="analytics-endpoints"></a>
 ## Analytics Endpoints
@@ -170,4 +180,51 @@ http://localhost:5000/teams/1
 #### Example Response:
 ```json
 "Sucessfully removed Team ID 1"
+```
+
+---------------------
+<a id="get-conferences"></a>
+### `/conferences`
+
+|METHOD|`GET`|
+|-------|-----|
+|**Description**|Gets list of team conferences|
+|**Parameters**||
+
+#### Example Request
+http://localhost:5000/conferences
+
+#### Example Response:
+```json
+[
+    null,
+    "ACC",
+    "American Athletic",
+    "American Rivers",
+    "American Southwest",
+    "Big 12",
+    "Big Sky",
+    ...
+]
+```
+
+---------------------
+<a id="get-seasons"></a>
+### `/seasons`
+
+|METHOD|`GET`|
+|-------|-----|
+|**Description**|Gets list of seasons|
+|**Parameters**||
+
+#### Example Request
+http://localhost:5000/conferences
+
+#### Example Response:
+```json
+[
+    2022,
+    2023,
+    ...
+]
 ```

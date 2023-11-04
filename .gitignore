@@ -1,3 +1,4 @@
 *.pyc
 *.sqlite
 auth_key.txt
+.venv/

@@ -3,6 +3,7 @@ import requests
 
 from models import base_model
 from models.score_model import Score
+from models.game_model import Game
 
 from typing import List
 from typing import Optional
@@ -74,10 +75,18 @@ def read_in_teams_data():
         session.commit()
 
 
-def rank_teams_by_ppg():
+def rank_teams_by_ppg(conference=None, limit=None, season=None):
     # order the teams by most to least ppg
     with Session(base_model.engine) as session:
-        teams_sorted_by_ppg = session.query(Team.school, func.avg(Score.points)).join(Score).group_by(Team.id).order_by(func.avg(Score.points).desc()).all()
+        query = session.query(Team.id, Team.school, func.avg(Score.points)).join(Score).join(Game)
+        if conference is not None:
+            query = query.where(Team.conference==conference)
+        if season is not None:
+            query = query.where(Game.season==season)
+        query = query.group_by(Team.id).order_by(func.avg(Score.points).desc())
+        if limit is not None:
+            query = query.limit(limit)
+        teams_sorted_by_ppg = query.all()
     return teams_sorted_by_ppg
 
 
@@ -122,3 +131,8 @@ def get_teams(conference=None):
             teams_query = teams_query.where(Team.conference == conference)
         teams = teams_query.all()
     return teams
+
+def get_conference_list():
+    with Session(base_model.engine) as session:
+        conferences_results = session.query(Team.conference).distinct().order_by(Team.conference).all()
+    return [conference[0] for conference in conferences_results]

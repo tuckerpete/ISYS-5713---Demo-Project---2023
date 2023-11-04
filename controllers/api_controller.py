@@ -1,4 +1,4 @@
-from models import team_model
+from models import team_model, game_model
 from views import api_view
 
 from flask import Flask, jsonify, request
@@ -16,13 +16,15 @@ def hello_world():
 @app.route("/ppg", methods=['GET'])
 def get_ppg():
     # optional param for limit
-    limit = request.args.get('limit', default=100, type=int)
+    limit = request.args.get('limit', default=None, type=int)
+    conference = request.args.get('conference', default=None, type=str)
+    season = request.args.get('season', default=None, type=str)
 
     # rank teams from most to least ppg
-    teams_sorted_by_ppg = team_model.rank_teams_by_ppg()
+    teams_sorted_by_ppg = team_model.rank_teams_by_ppg(conference=conference, limit=limit, season=season)
 
     # output a pretty table
-    ranked_teams = api_view.print_ppg_ranking_table(teams_sorted_by_ppg)[:limit]
+    ranked_teams = api_view.print_ppg_ranking_table(teams_sorted_by_ppg)
 
     return jsonify(ranked_teams), 200
 
@@ -68,3 +70,19 @@ def get_teams():
     else:
         return f"Error: No teams found", 404
 
+@app.route("/conferences", methods=['GET'])
+def get_conference_list():
+    conferences = team_model.get_conference_list()
+    if conferences is not None:
+        return jsonify(conferences), 200
+    else:
+        return f"Error: No conferences found", 200
+    
+
+@app.route("/seasons", methods=['GET'])
+def get_season_list():
+    seasons = game_model.get_seasons_list()
+    if seasons is not None:
+        return jsonify(seasons), 200
+    else:
+        return f"Error: No seasons found", 200
